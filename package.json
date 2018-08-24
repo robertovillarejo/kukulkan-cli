@@ -1,0 +1,24 @@
+{
+  "name": "kukulkan",
+  "version": "1.0.0",
+  "description": "The Kukulkan project generator",
+  "main": "index.js",
+  "bin": "index.js",
+  "author": "Roberto Villarejo Martínez",
+  "license": "MIT",
+  "scripts": {
+    "build": "tsc"
+  },
+  "dependencies": {
+    "chalk": "2.4.1",
+    "cross-spawn": "^6.0.5",
+    "lodash": "^4.17.10",
+    "omelette": "^0.4.11",
+    "yargs": "^12.0.1"
+  },
+  "devDependencies": {
+    "@types/node": "10.0.3",
+    "ts-node": "6.0.2",
+    "typescript": "2.8.3"
+  }
+}
