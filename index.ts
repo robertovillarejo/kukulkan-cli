@@ -4,9 +4,29 @@ import * as chalk from "chalk";
 
 import * as spawn from "cross-spawn";
 import * as _ from "lodash";
-import * as omelette from 'omelette'
-/*
-omelette`kukulkan ${['pull', 'push']} ${['origin', 'upstream']} ${['master', 'develop']}`.init()
+import * as omelette from 'omelette';
+
+//omelette`kukulkan ${['pull', 'push']} ${['origin', 'upstream']} ${['master', 'develop']}`.init()
+
+const completion = omelette(`kukulkan -n <project> -p <packaging> -d <database>`);
+
+completion.on('project', ({ reply }) => {
+    reply(['demo', 'awesome']);
+});
+
+completion.on('packaging', ({ reply }) => {
+    reply(['mx.infotec.dads', 'com.example']);
+});
+
+completion.on('database', ({ reply }) => {
+    reply(['MYSQL', 'MONGO']);
+});
+
+completion.init();
+
+if (~process.argv.indexOf('--setup')) {
+    completion.setupShellInitFile()
+}
 
 require('yargs')
     .command(
@@ -34,43 +54,10 @@ with database type ${argv.d}`));
             //spawnCommandSync("java", ["-jar", "cli-0.0.1-SNAPSHOT.jar", argv.n, argv.p, argv.d, process.cwd()], {cwd: __dirname});
         }
     )
-    .completion('completion', function (current, argv) {
-        // 'current' is the current command being completed.
-        // 'argv' is the parsed arguments so far.
-        // simply return an array of completions.
-        console.log("Completion...");
-        return [
-            'foo',
-            'bar'
-        ];
-    })
     .help()
     .argv;
-*/
+
 function spawnCommandSync(command: string, args: string[], opt: any) {
     opt = opt || {};
     return spawn.sync(command, args, _.defaults(opt, { stdio: 'inherit' }));
 }
-
-const omelette = require('../');
-omelette('kukulkan').tree({
-    how: {
-        much: {
-            is: {
-                this: ['car'],
-                that: ['house'],
-            }
-        },
-        are: ['you'],
-        many: ['cars', 'houses'],
-    },
-    where: {
-        are: {
-            you: ['from'],
-            the: ['houses', 'cars'],
-        },
-        is: {
-            your: ['house', 'car'],
-        },
-    },
-}).init();
