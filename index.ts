@@ -6,16 +6,24 @@ import * as spawn from "cross-spawn";
 import * as _ from "lodash";
 import * as omelette from 'omelette';
 
-//omelette`kukulkan ${['pull', 'push']} ${['origin', 'upstream']} ${['master', 'develop']}`.init()
+const completion = omelette(`kukulkan <action> <name> <packaging> <databaseFlag> <database>`);
 
-const completion = omelette(`kukulkan -n <project> -p <packaging> -d <database>`);
-
-completion.on('project', ({ reply }) => {
-    reply(['demo', 'awesome']);
+completion.on('action', ({ reply }) => {
+    reply(['project']);
 });
 
-completion.on('packaging', ({ reply }) => {
-    reply(['mx.infotec.dads', 'com.example']);
+completion.on('name', ({ reply }) => {
+    reply(['-name ']);
+});
+
+completion.on('packaging', ({ before, reply }) => {
+    if (before !== "-name") {
+        reply(['-packaging']);
+    }
+});
+
+completion.on('databaseFlag', ({ reply }) => {
+    reply(['-database']);
 });
 
 completion.on('database', ({ reply }) => {
@@ -48,7 +56,7 @@ require('yargs')
         },
         (argv) => {
             console.log(chalk.default.greenBright(
-                `Generating project ${argv.n}
+                `Generating project ${argv.name}
 with packaging ${argv.p}
 with database type ${argv.d}`));
             //spawnCommandSync("java", ["-jar", "cli-0.0.1-SNAPSHOT.jar", argv.n, argv.p, argv.d, process.cwd()], {cwd: __dirname});

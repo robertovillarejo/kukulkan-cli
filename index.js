@@ -5,15 +5,24 @@ var chalk = require("chalk");
 var spawn = require("cross-spawn");
 var _ = require("lodash");
 var omelette = require("omelette");
-//omelette`kukulkan ${['pull', 'push']} ${['origin', 'upstream']} ${['master', 'develop']}`.init()
-var completion = omelette("kukulkan -n <project> -p <packaging> -d <database>");
-completion.on('project', function (_a) {
+var completion = omelette("kukulkan <action> <name> <packaging> <databaseFlag> <database>");
+completion.on('action', function (_a) {
     var reply = _a.reply;
-    reply(['demo', 'awesome']);
+    reply(['project']);
+});
+completion.on('name', function (_a) {
+    var reply = _a.reply;
+    reply(['-name ']);
 });
 completion.on('packaging', function (_a) {
+    var before = _a.before, reply = _a.reply;
+    if (before !== "-name") {
+        reply(['-packaging']);
+    }
+});
+completion.on('databaseFlag', function (_a) {
     var reply = _a.reply;
-    reply(['mx.infotec.dads', 'com.example']);
+    reply(['-database']);
 });
 completion.on('database', function (_a) {
     var reply = _a.reply;
@@ -25,7 +34,7 @@ if (~process.argv.indexOf('--setup')) {
 }
 require('yargs')
     .command('project', 'Create a new project', function (yargs) {
-    return yargs.option('n', {
+    return yargs.option('name', {
         alias: 'name',
         describe: 'The name of project'
     })
@@ -38,7 +47,7 @@ require('yargs')
         describe: 'The database type'
     });
 }, function (argv) {
-    console.log(chalk.default.greenBright("Generating project " + argv.n + "\nwith packaging " + argv.p + "\nwith database type " + argv.d));
+    console.log(chalk.default.greenBright("Generating project " + argv.name + "\nwith packaging " + argv.p + "\nwith database type " + argv.d));
     //spawnCommandSync("java", ["-jar", "cli-0.0.1-SNAPSHOT.jar", argv.n, argv.p, argv.d, process.cwd()], {cwd: __dirname});
 })
     .help()
